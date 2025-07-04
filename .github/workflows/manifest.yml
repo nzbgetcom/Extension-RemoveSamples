@@ -1,0 +1,52 @@
+name: Manifest Check
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  manifest-check:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.8'
+    
+    - name: Install JSON schema validator
+      run: |
+        python -m pip install --upgrade pip
+        pip install jsonschema
+    
+    - name: Validate manifest.json
+      run: |
+        python -c "
+        import json
+        import jsonschema
+        
+        # Basic schema for NZBGet manifest
+        schema = {
+            'type': 'object',
+            'required': ['main', 'name', 'kind', 'displayName', 'version', 'author'],
+            'properties': {
+                'main': {'type': 'string'},
+                'name': {'type': 'string'},
+                'kind': {'type': 'string'},
+                'displayName': {'type': 'string'},
+                'version': {'type': 'string'},
+                'author': {'type': 'string'},
+                'options': {'type': 'array'}
+            }
+        }
+        
+        with open('manifest.json', 'r') as f:
+            manifest = json.load(f)
+            
+        jsonschema.validate(manifest, schema)
+        print('Manifest validation passed!')
+        "
