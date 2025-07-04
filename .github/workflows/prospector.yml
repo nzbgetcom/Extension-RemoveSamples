@@ -24,7 +24,7 @@ jobs:
         pip install prospector[with_pyroma]
     
     - name: Run Prospector
-      run: prospector --profile minimal --zero-exit main.py
+      run: prospector --zero-exit main.py
     
     - name: Upload Prospector report
       uses: actions/upload-artifact@v4
