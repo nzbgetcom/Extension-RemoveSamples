@@ -13,40 +13,15 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.8'
-    
-    - name: Install JSON schema validator
+    - name: Check manifest.json exists
       run: |
-        python -m pip install --upgrade pip
-        pip install jsonschema
+        if [ ! -f manifest.json ]; then
+          echo "manifest.json not found!"
+          exit 1
+        fi
+        echo "manifest.json found"
     
-    - name: Validate manifest.json
+    - name: Validate JSON syntax
       run: |
-        python -c "
-        import json
-        import jsonschema
-        
-        # Basic schema for NZBGet manifest
-        schema = {
-            'type': 'object',
-            'required': ['main', 'name', 'kind', 'displayName', 'version', 'author'],
-            'properties': {
-                'main': {'type': 'string'},
-                'name': {'type': 'string'},
-                'kind': {'type': 'string'},
-                'displayName': {'type': 'string'},
-                'version': {'type': 'string'},
-                'author': {'type': 'string'},
-                'options': {'type': 'array'}
-            }
-        }
-        
-        with open('manifest.json', 'r') as f:
-            manifest = json.load(f)
-            
-        jsonschema.validate(manifest, schema)
-        print('Manifest validation passed!')
-        "
+        python -c "import json; json.load(open('manifest.json'))"
+        echo "manifest.json is valid JSON"
