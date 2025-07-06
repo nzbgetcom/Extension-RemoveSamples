@@ -13,7 +13,7 @@ Documentation: https://github.com/Anunnaki-Astronaut/RemoveSamples-NZBGet/wiki
 # Author: Anunnaki-Astronaut  
 # URL: https://github.com/Anunnaki-Astronaut/RemoveSamples-NZBGet
 # License: GNU General Public License v2.0
-# Version: 1.0.1
+# v1.0.1 - Ready for NZBGet team review
 ##############################################################################
 # NZBGET POST-PROCESSING SCRIPT
 #
