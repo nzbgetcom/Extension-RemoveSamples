@@ -4,22 +4,23 @@
     "homepage": "https://github.com/Anunnaki-Astronaut/RemoveSamples-NZBGet",
     "kind": "POST-PROCESSING",
     "displayName": "Remove Samples",
-    "version": "1.0",
+    "version": "1.0.1",
     "author": "Anunnaki-Astronaut",
     "license": "GNU",
-    "about": "Detects and deletes sample files and/or directories before Sonarr/Radarr/Lidarr/Prowlarr see them",
+    "about": "Modern NZBGet extension for intelligent sample file detection and removal. Automatically cleans sample files/directories before Sonarr/Radarr/Lidarr/Prowlarr processing.",
     "queueEvents": "",
     "requirements": [
         "This script requires Python 3.8+ to be installed on your system."
     ],
     "description": [
-        "Detects and deletes \"sample\" files and/or directories in a download",
-        "before Sonarr / Radarr / Lidarr / Prowlarr see them.",
+        "RemoveSamples intelligently detects and removes sample files and directories",
+        "using advanced pattern matching and configurable size thresholds.",
         "",
-        "1. In NZBGet ► Settings ► CATEGORIES select \"RemoveSamples\" in",
-        "   \"ExtensionScripts\" for every category you want cleaned.",
-        "2. Script order: place RemoveSamples carefully within your workflow for",
-        "   optimal results."
+        "🎯 SETUP:",
+        "1. Settings → Categories → [Your Category] → ExtensionScripts → Add 'RemoveSamples'",
+        "2. Place RemoveSamples AFTER unpack but BEFORE media manager processing",
+        "",
+        "📖 Complete documentation: https://github.com/Anunnaki-Astronaut/RemoveSamples-NZBGet/wiki"
     ],
     "options": [
         {
@@ -27,7 +28,8 @@
             "displayName": "Remove Directories",
             "value": "Yes",
             "description": [
-                "Delete folders whose names match \"sample\"."
+                "Delete entire directories with sample patterns (samples/, SAMPLE/, etc.)",
+                "Recommended: Yes - removes complete sample folder structures"
             ],
             "select": ["Yes", "No"]
         },
@@ -36,7 +38,8 @@
             "displayName": "Remove Files", 
             "value": "Yes",
             "description": [
-                "Delete files whose names contain \"sample\"."
+                "Delete individual files containing sample patterns in filename",
+                "Recommended: Yes - removes files like movie.sample.mkv"
             ],
             "select": ["Yes", "No"]
         },
@@ -45,7 +48,8 @@
             "displayName": "Debug",
             "value": "No",
             "description": [
-                "Enable verbose debug logging in NZBGet."
+                "Enable detailed logging for troubleshooting and configuration testing",
+                "Set to Yes only during setup or when investigating issues"
             ],
             "select": ["Yes", "No"]
         },
@@ -54,18 +58,19 @@
             "displayName": "Video Size Threshold (MB)",
             "value": 150,
             "description": [
-                "Size limit (MiB) to treat video as a sample.",
-                "50 ≈ 720p clip, 100 ≈ 1080p clip, 150 ≈ 2160p clip.",
-                "(range 0 .. 1000)"
+                "Maximum size (MB) for video files to be considered samples",
+                "720p clips: 50MB | 1080p clips: 150MB | 4K clips: 300-500MB",
+                "Higher values = more aggressive detection (range: 1-1000)"
             ],
-            "select": [0, 1000]
+            "select": [1, 1000]
         },
         {
             "name": "VideoExts",
             "displayName": "Video Extensions",
-            "value": ".mkv,.mp4,.avi,.mov,.wmv,.flv,.webm,.ts,.m4v,.vob",
+            "value": ".mkv,.mp4,.avi,.mov,.wmv,.flv,.webm,.ts,.m4v,.vob,.mpg,.mpeg,.iso",
             "description": [
-                "Comma-separated list of video extensions (no spaces)."
+                "Comma-separated video file extensions for size-based detection",
+                "Default covers most common formats. Add rare formats if needed."
             ],
             "select": []
         },
@@ -74,18 +79,19 @@
             "displayName": "Audio Size Threshold (MB)",
             "value": 2,
             "description": [
-                "Size limit (MiB) to treat audio as a sample.",
-                "2 MiB ≈ 30 s of 320 kbps MP3. 0 disables size test.",
-                "(range 0 .. 100)"
+                "Maximum size (MB) for audio files to be considered samples",
+                "2MB ≈ 30-second 320kbps MP3 | 5MB ≈ 2-minute track",
+                "Set to 0 to disable audio size detection (range: 0-100)"
             ],
             "select": [0, 100]
         },
         {
             "name": "AudioExts",
             "displayName": "Audio Extensions",
-            "value": ".wav,.aiff,.mp3,.flac,.m4a,.ogg,.aac,.alac,.ape,.opus,.wma",
+            "value": ".mp3,.flac,.aac,.ogg,.wma,.m4a,.opus,.wav,.alac,.ape",
             "description": [
-                "Comma-separated audio extensions (no spaces)."
+                "Comma-separated audio file extensions for size-based detection",
+                "Covers lossless (FLAC, WAV) and compressed (MP3, AAC) formats"
             ],
             "select": []
         }
