@@ -164,7 +164,7 @@ def is_sample_file(path):
     # Check size-based detection for recognized media files
     file_ext = path.suffix.lower()
     try:
-        size_mb = path.stat().st_size / (1 << 20)  # Convert bytes to MB (1024*1024)
+        size_mb = path.stat().st_size / (1 << 20)  # Convert bytes to MB
     except OSError:
         debug_log(f"Cannot get size for {filename}: file access error")
         return False
