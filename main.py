@@ -164,9 +164,9 @@ def is_sample_file(path):
     # Check size-based detection for recognized media files
     file_ext = path.suffix.lower()
     try:
-        size_mb = path.stat().st_size / (1024 * 1024)  # Convert bytes to MB
-    except OSError as e:
-        debug_log(f"Cannot get size for {filename}: {e}")
+        size_mb = path.stat().st_size / (1 << 20)  # Convert bytes to MB (1024*1024)
+    except OSError:
+        debug_log(f"Cannot get size for {filename}: file access error")
         return False
 
     # Video file size detection
@@ -215,10 +215,14 @@ def remove_samples(root_path):
     for path in sorted(root_path.rglob('*'), reverse=True):
         try:
             if path.is_file() and REM_FILES and is_sample_file(path):
-                size_mb = path.stat().st_size / (1024 * 1024)
-                path.unlink(missing_ok=True)
-                removed_items.append(str(path))
-                log("INFO", f"Removed sample file: {path.relative_to(root_path)} ({size_mb:.1f}MB)")
+                try:
+                    size_mb = path.stat().st_size / (1 << 20)
+                    path.unlink(missing_ok=True)
+                    removed_items.append(str(path))
+                    log("INFO", f"Removed sample file: {path.relative_to(root_path)} ({size_mb:.1f}MB)")
+                except OSError as e:
+                    log("WARNING", f"Could not remove file {path.relative_to(root_path)}: {e}")
+                    continue
                 
             elif path.is_dir() and REM_DIRS and is_sample_dir(path.name):
                 # Count items in directory before removal
