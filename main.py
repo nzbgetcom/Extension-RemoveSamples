@@ -141,110 +141,47 @@ DIR_RE = [re.compile(pattern, re.IGNORECASE) for pattern in DIR_PATTERNS]
 
 
 def is_sample_file(path):
-    """
-    Determine if a file should be removed based on pattern and size detection.
-    
-    Returns True if:
-    1. Filename matches sample patterns, OR
-    2. File is below size threshold for its media type (video/audio)
-    
-    Args:
-        path: Path object for the file to check
-        
-    Returns:
-        bool: True if file should be removed
-    """
-    filename = path.name
-    
-    # Check filename patterns first
-    if any(regex.search(filename) for regex in FILE_RE):
-        debug_log(f"Pattern match: '{filename}' contains sample pattern")
+    """Check if a file is considered a sample based on name and size."""
+    name = path.name
+    if any(regex.search(name) for regex in FILE_RE):
         return True
     
-    # Check size-based detection for recognized media files
-    file_ext = path.suffix.lower()
+    ext = path.suffix.lower()
     try:
-        size_mb = path.stat().st_size / (1 << 20)  # Convert bytes to MB
+        size_mb = path.stat().st_size / (1 << 20)
     except OSError:
-        debug_log(f"Cannot get size for {filename}: file access error")
         return False
 
-    # Video file size detection
-    if file_ext in VIDEO_EXTS and VID_LIMIT > 0 and size_mb <= VID_LIMIT:
-        debug_log(f"Video size detection: {filename} ({size_mb:.1f}MB ≤ {VID_LIMIT}MB)")
+    if ext in VIDEO_EXTS and VID_LIMIT and size_mb <= VID_LIMIT:
         return True
-        
-    # Audio file size detection    
-    if file_ext in AUDIO_EXTS and AUD_LIMIT > 0 and size_mb <= AUD_LIMIT:
-        debug_log(f"Audio size detection: {filename} ({size_mb:.1f}MB ≤ {AUD_LIMIT}MB)")
+    if ext in AUDIO_EXTS and AUD_LIMIT and size_mb <= AUD_LIMIT:
         return True
-        
-    debug_log(f"Preserving: {filename} ({size_mb:.1f}MB) - no pattern match, above thresholds")
     return False
 
 
 def is_sample_dir(dir_name):
-    """
-    Check if a directory name matches sample patterns.
-    
-    Args:
-        dir_name: Name of the directory to check
-        
-    Returns:
-        bool: True if directory should be removed
-    """
+    """Check if a directory name matches sample patterns."""
     return any(regex.search(dir_name) for regex in DIR_RE)
 
 
-def remove_samples(root_path):
-    """
-    Remove sample files and directories from the specified root path.
-    
-    Processes files and directories recursively, removing items that match
-    sample patterns or size criteria.
-    
-    Args:
-        root_path: Path object for the root directory to process
-        
-    Returns:
-        list: List of removed file/directory paths
-    """
-    removed_items = []
-    
-    # Process in reverse order to handle nested directories properly
-    for path in sorted(root_path.rglob('*'), reverse=True):
-        try:
-            if path.is_file() and REM_FILES and is_sample_file(path):
-                try:
-                    size_mb = path.stat().st_size / (1 << 20)
-                    path.unlink(missing_ok=True)
-                    removed_items.append(str(path))
-                    log("INFO", f"Removed sample file: {path.relative_to(root_path)} ({size_mb:.1f}MB)")
-                except OSError as e:
-                    log("WARNING", f"Could not remove file {path.relative_to(root_path)}: {e}")
-                    continue
-                
-            elif path.is_dir() and REM_DIRS and is_sample_dir(path.name):
-                # Count items in directory before removal
-                try:
-                    item_count = len(list(path.rglob('*')))
-                except OSError:
-                    item_count = "unknown"
-                    
-                shutil.rmtree(path, ignore_errors=True)
-                removed_items.append(str(path))
-                log("INFO", f"Removed sample directory: {path.relative_to(root_path)} ({item_count} items)")
-                
-        except (OSError, PermissionError) as e:
-            log("WARNING", f"Could not remove {path.relative_to(root_path)}: {e}")
-            continue
-            
-    return removed_items
+def remove_samples(root):
+    """Remove sample files and directories from the specified root path."""
+    removed = []
+    for path in sorted(root.rglob('*'), reverse=True):
+        if path.is_file() and REM_FILES and is_sample_file(path):
+            path.unlink(missing_ok=True)
+            removed.append(str(path))
+            log("INFO", f"Removed file {path.relative_to(root)}")
+        elif path.is_dir() and REM_DIRS and is_sample_dir(path.name):
+            shutil.rmtree(path, ignore_errors=True)
+            removed.append(str(path))
+            log("INFO", f"Removed dir  {path.relative_to(root)}")
+    return removed
 
 
 def main():
     """Main entry point for the RemoveSamples extension."""
-    # Validate post-processing environment
+    # Check if running in post-processing mode
     if not DL_DIR:
         log("ERROR", "NZBPP_DIRECTORY missing - script must run in post-processing mode")
         sys.exit(POSTPROCESS_ERROR)
