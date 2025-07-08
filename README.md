@@ -10,7 +10,7 @@
 
 ## 🚀 Quick Start
 
-**📖 [Complete Documentation](../../wiki/01_Home)** | **🚀 [Installation Guide](../../wiki/02_Installation_Guide)** | **⚙️ [Configuration Reference](../../wiki/03_Configuration_Reference)**
+**📖 [Complete Documentation](../../wiki/Home)** | **🚀 [Installation Guide](../../wiki/02_Installation_Guide)** | **⚙️ [Configuration Reference](../../wiki/03_Configuration_Reference)**
 
 ## ✨ Key Features
 
