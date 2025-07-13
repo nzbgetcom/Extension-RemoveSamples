@@ -10,7 +10,7 @@
 
 ## 🚀 Quick Start
 
-**📖 [Complete Documentation](../../wiki)** | **🚀 [Installation Guide](../../wiki/Installation-Guide)** | **⚙️ [Configuration Reference](../../wiki/Configuration-Reference)**
+**📖 [Complete Documentation](../../wiki/Home)** | **🚀 [Installation Guide](../../wiki/02_Installation_Guide)** | **⚙️ [Configuration Reference](../../wiki/03_Configuration_Reference)**
 
 ## ✨ Key Features
 
@@ -36,7 +36,7 @@
 | **Audio Support** | ❌ Limited | ✅ Full configurable support |
 | **Maintenance** | ❌ Abandoned (6+ years) | ✅ Active development |
 
-**[See detailed comparison →](../../wiki/Comparison-DeleteSamples)**
+**[See detailed comparison →](../../wiki/09_Comparison_DeleteSamples)**
 
 ## 📦 Installation
 
@@ -62,7 +62,7 @@ mkdir -p RemoveSamples
 # Download files and set permissions for nobody:users
 ```
 
-**📖 [Detailed installation instructions for all platforms →](../../wiki/Installation-Guide)**
+**📖 [Detailed installation instructions for all platforms →](../../wiki/02_Installation_Guide)**
 
 ## ⚙️ Configuration
 
@@ -96,7 +96,7 @@ Video: 150 MB | Audio: 2 MB | Debug: No
 Video: 50 MB | Audio: 1 MB | Debug: No
 ```
 
-**📖 [Complete configuration guide →](../../wiki/Configuration-Reference)**
+**📖 [Complete configuration guide →](../../wiki/03_Configuration_Reference)**
 
 ## 🔄 Workflow Integration
 
@@ -115,7 +115,7 @@ Video: 50 MB | Audio: 1 MB | Debug: No
 - **Lidarr**: No 30-second preview tracks in albums
 - **Prowlarr**: Consistent cleanup across all content types
 
-**📖 [Complete workflow integration guide →](../../wiki/Workflow-Integration)**
+**📖 [Complete workflow integration guide →](../../wiki/05_Workflow_Integration)**
 
 ## 📊 Sample Detection Examples
 
@@ -148,7 +148,7 @@ Movie.Title.SAMPLE.2023.mkv     # If "SAMPLE" in original title
 - **Configurable extensions** for each media type
 - **Smart combination** of pattern and size detection
 
-**📖 [Complete detection logic documentation →](../../wiki/Detection-Logic)**
+**📖 [Complete detection logic documentation →](../../wiki/06_Detection_Logic)**
 
 ## 🐳 Docker & Container Support
 
@@ -180,15 +180,15 @@ ls -la /path/to/scripts/RemoveSamples/
 - **Files not removed**: Verify thresholds and enable debug mode
 - **Docker permissions**: Use container-appropriate user/group
 
-**📖 [Complete troubleshooting guide →](../../wiki/Troubleshooting-Guide)**
+**📖 [Complete troubleshooting guide →](../../wiki/07_Troubleshooting_Guide)**
 
 ## 📞 Support & Documentation
 
-- **📖 Complete Wiki**: [Comprehensive Documentation](../../wiki)
+- **📖 Complete Wiki**: [Comprehensive Documentation](../../wiki/01_Home)
 - **🐛 Bug Reports**: [GitHub Issues](https://github.com/Anunnaki-Astronaut/RemoveSamples-NZBGet/issues)
 - **💬 Discussions**: [GitHub Discussions](https://github.com/Anunnaki-Astronaut/RemoveSamples-NZBGet/discussions)
 - **🔒 Security Issues**: anunnaki.astronaut@machinamindmeld.com
-- **❓ FAQ**: [Frequently Asked Questions](../../wiki/FAQ)
+- **❓ FAQ**: [Frequently Asked Questions](../../wiki/08_FAQ)
 
 ## 🛡️ Security & Quality
 
@@ -198,9 +198,11 @@ RemoveSamples is built with enterprise-grade practices:
 - **Comprehensive test coverage** with automated CI/CD
 - **Professional code review** workflow
 
-## 🏆 Recognition
+## 🏆 Official Recognition
 
-*Submitted to NZBGet team for inclusion in the official extension repository.*
+**🎉 RemoveSamples is now officially available in the NZBGet Extension Manager!**
+
+*RemoveSamples has been accepted by the NZBGet team and is available for one-click installation through the official Extension Manager.*
 
 ## 📋 Requirements
 
@@ -228,7 +230,7 @@ prospector main.py
 4. Ensure all tests pass: `python -m unittest tests.py -v`
 5. Submit a pull request
 
-**📖 [Development documentation →](../../wiki/Contributing)**
+**📖 [Development documentation →](../../wiki/10_Contributing)**
 
 ## 📄 License
 
@@ -236,7 +238,8 @@ GNU General Public License v2.0 - see [LICENSE](LICENSE) file for details.
 
 ## 📈 Changelog
 
-### v1.0.0 - Initial Release
+### v1.0.1 - Official Release
+- ✅ **Official NZBGet adoption** - Available in Extension Manager
 - ✅ Modern NZBGet extension format with manifest.json
 - ✅ GUI dropdown configuration interface  
 - ✅ Advanced pattern matching with word boundaries
@@ -249,5 +252,5 @@ GNU General Public License v2.0 - see [LICENSE](LICENSE) file for details.
 
 ---
 
-**Ready to get started?** → **[Installation Guide](../../wiki/Installation-Guide)**  
-**Need help?** → **[FAQ](../../wiki/FAQ)** | **[Troubleshooting](../../wiki/Troubleshooting-Guide)**
+**Ready to get started?** → **[Installation Guide](../../wiki/02_Installation_Guide)**  
+**Need help?** → **[FAQ](../../wiki/08_FAQ)** | **[Troubleshooting](../../wiki/07_Troubleshooting_Guide)**
