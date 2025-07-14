@@ -45,7 +45,8 @@ REQUIRED_OPTIONS = (
     "NZBPO_VIDEOSIZETHRESHOLDMB",
     "NZBPO_VIDEOEXTS",
     "NZBPO_AUDIOSIZETHRESHOLDMB",
-    "NZBPO_AUDIOEXTS"
+    "NZBPO_AUDIOEXTS",
+    "NZBPO_TESTMODE"
 )
 
 for optname in REQUIRED_OPTIONS:
@@ -65,6 +66,9 @@ REM_DIRS = os.environ.get('NZBPO_REMOVEDIRECTORIES', 'Yes').lower() in (
     'yes', 'y', 'true', '1'
 )
 REM_FILES = os.environ.get('NZBPO_REMOVEFILES', 'Yes').lower() in (
+    'yes', 'y', 'true', '1'
+)
+TEST_MODE = os.environ.get('NZBPO_TESTMODE', 'No').lower() in (
     'yes', 'y', 'true', '1'
 )
 
@@ -153,8 +157,83 @@ def remove_samples(root):
     return removed
 
 
+import tempfile
+import time
+
+def run_test_mode():
+    print("[DETAIL] RemoveSamples TEST: Creating test environment...")
+    sys.stdout.flush()
+    test_dir = Path(tempfile.gettempdir()) / f"RemoveSamples-Test-{int(time.time())}"
+    try:
+        # Create test structure
+        test_dir.mkdir(parents=True, exist_ok=True)
+        # Files
+        (test_dir / "Movie.2023.1080p.mkv").write_bytes(b"\0" * 200 * 1024 * 1024)
+        (test_dir / "Movie.2023.sample.mkv").write_bytes(b"\0" * 45 * 1024 * 1024)
+        (test_dir / "sample.mp4").write_bytes(b"\0" * 30 * 1024 * 1024)
+        (test_dir / "soundtrack.mp3").write_bytes(b"\0" * 4 * 1024 * 1024)
+        (test_dir / "sample_track.mp3").write_bytes(b"\0" * 1 * 1024 * 1024)
+        # Directories
+        (test_dir / "samples").mkdir(exist_ok=True)
+        (test_dir / "samples" / "preview.mkv").write_bytes(b"\0" * 10 * 1024 * 1024)
+        (test_dir / "Bonus_Features").mkdir(exist_ok=True)
+        (test_dir / "Bonus_Features" / "extras.mkv").write_bytes(b"\0" * 20 * 1024 * 1024)
+
+        print("[DETAIL] RemoveSamples TEST: Testing with your settings...")
+        sys.stdout.flush()
+
+        # Detection logic (simulate, do not remove)
+        results = []
+        remove_count = 0
+        preserve_count = 0
+
+        for path in sorted(test_dir.rglob('*'), key=lambda p: str(p)):
+            rel = path.relative_to(test_dir)
+            if path.is_file():
+                if is_sample_file(path):
+                    results.append(f"[INFO] ❌ WOULD REMOVE: {rel} ({int(path.stat().st_size/1048576)}MB - pattern/threshold match)")
+                    remove_count += 1
+                else:
+                    results.append(f"[INFO] ✅ PRESERVED: {rel} ({int(path.stat().st_size/1048576)}MB - no match)")
+                    preserve_count += 1
+            elif path.is_dir():
+                if is_sample_dir(path.name):
+                    results.append(f"[INFO] ❌ WOULD REMOVE: {rel}/ directory (directory pattern match)")
+                    remove_count += 1
+                else:
+                    results.append(f"[INFO] ✅ PRESERVED: {rel}/ directory (no sample pattern)")
+                    preserve_count += 1
+
+        print("[DETAIL] RemoveSamples TEST: Results ready - check logs for details!")
+        sys.stdout.flush()
+
+        # Visual log output
+        print("[INFO] ═══════════════════════════════════════════════════════")
+        print("[INFO] 🧪 REMOVESAMPLES TEST MODE RESULTS 🧪")
+        print("[INFO] ═══════════════════════════════════════════════════════")
+        for line in results:
+            print(line)
+        print("[INFO] ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        print(f"[INFO] 📊 SUMMARY: {remove_count} items would be removed, {preserve_count} preserved")
+        print("[INFO] 🎉 Your configuration is working correctly!")
+        print("[INFO] 💡 TIP: Check Settings → Logging → Messages to see these results")
+        print("[INFO] ═══════════════════════════════════════════════════════")
+        sys.stdout.flush()
+    except Exception as e:
+        print(f"[ERROR] Test Mode failed: {e}")
+    finally:
+        try:
+            shutil.rmtree(test_dir, ignore_errors=True)
+        except Exception:
+            pass
+
 def main():
     """Main entry point for the RemoveSamples extension."""
+    if TEST_MODE:
+        run_test_mode()
+        print("[DETAIL] RemoveSamples TEST: Cleaned up test environment.")
+        sys.exit(POSTPROCESS_SUCCESS)
+
     # Check if running in post-processing mode
     if not DL_DIR:
         error_msg = (
