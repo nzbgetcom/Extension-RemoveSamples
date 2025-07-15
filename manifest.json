@@ -13,8 +13,12 @@
         "This script requires Python 3.8+ to be installed on your system."
     ],
 "description": [
-        "To test: Download https://github.com/Anunnaki-Astronaut/RemoveSamples-NZBGet/raw/main/test-files/RemoveSamples-Test.txt",
-        "Add via Downloads → Add → Choose Files → select downloaded file → set category → Add"
+        "RemoveSamples intelligently detects and removes sample files and directories",
+        "using advanced pattern matching and configurable size thresholds.",
+        "",
+        "🎯 SETUP:",
+        "1. Settings → Categories → [Your Category] → ExtensionScripts → Add 'RemoveSamples'",
+        "2. Place RemoveSamples AFTER unpack but BEFORE media manager processing"
     ],
     "options": [
         {
@@ -37,13 +41,14 @@
             ],
             "select": ["Yes", "No"]
         },
-        {
+{
             "name": "Debug",
             "displayName": "Debug",
             "value": "No",
             "description": [
                 "Enable detailed logging for troubleshooting and configuration testing",
-                "Set to Yes only during setup or when investigating issues"
+                "Set to Yes only during setup or when investigating issues",
+                "Testing Guide: https://github.com/Anunnaki-Astronaut/RemoveSamples-NZBGet/wiki/04_Testing_Guide"
             ],
             "select": ["Yes", "No"]
         },
@@ -88,18 +93,6 @@
                 "Covers lossless (FLAC, WAV) and compressed (MP3, AAC) formats"
             ],
             "select": []
-        },
-        {
-            "name": "TestMode",
-            "displayName": "Test Mode",
-            "value": "No",
-            "description": [
-                "Run in test mode: creates sample files, shows detection results, then cleans up",
-                "Perfect for verifying your configuration settings work correctly",
-                "Results appear in NZBGet logs and status messages",
-                "Check Settings → Logging → Messages for detailed visual results"
-            ],
-            "select": ["Yes", "No"]
         }
     ],
     "commands": [],
