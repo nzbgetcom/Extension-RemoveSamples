@@ -252,5 +252,5 @@ GNU General Public License v2.0 - see [LICENSE](LICENSE) file for details.
 
 ---
 
-**Ready to get started?** → **[Installation Guide](../../wiki/02_Installation_Guide)**  
-**Need help?** → **[FAQ](../../wiki/08_FAQ)** | **[Troubleshooting](../../wiki/07_Troubleshooting_Guide)**
+**Ready to get started?** → **[Installation Guide](../../wiki/Installation-Guide)**  
+**Need help?** → **[FAQ](../../wiki/FAQ)** | **[Troubleshooting](../../wiki/Troubleshooting-Guide)**

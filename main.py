@@ -67,7 +67,6 @@ REM_DIRS = os.environ.get('NZBPO_REMOVEDIRECTORIES', 'Yes').lower() in (
 REM_FILES = os.environ.get('NZBPO_REMOVEFILES', 'Yes').lower() in (
     'yes', 'y', 'true', '1'
 )
-
 VID_LIMIT = int(os.environ.get('NZBPO_VIDEOSIZETHRESHOLDMB', '150') or '0')
 AUD_LIMIT = int(os.environ.get('NZBPO_AUDIOSIZETHRESHOLDMB', '2') or '0')
 

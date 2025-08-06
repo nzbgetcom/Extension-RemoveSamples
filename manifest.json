@@ -12,7 +12,7 @@
     "requirements": [
         "This script requires Python 3.8+ to be installed on your system."
     ],
-    "description": [
+"description": [
         "RemoveSamples intelligently detects and removes sample files and directories",
         "using advanced pattern matching and configurable size thresholds.",
         "",
@@ -41,26 +41,27 @@
             ],
             "select": ["Yes", "No"]
         },
-        {
+{
             "name": "Debug",
             "displayName": "Debug",
             "value": "No",
             "description": [
                 "Enable detailed logging for troubleshooting and configuration testing",
-                "Set to Yes only during setup or when investigating issues"
+                "Set to Yes only during setup or when investigating issues",
+                "Testing Guide: https://github.com/Anunnaki-Astronaut/RemoveSamples-NZBGet/wiki/04_Testing_Guide"
             ],
             "select": ["Yes", "No"]
         },
-        {
+{
             "name": "VideoSizeThresholdMB",
             "displayName": "Video Size Threshold (MB)",
             "value": 150,
-            "description": [
+"description": [
                 "Maximum size (MB) for video files to be considered samples",
-                "720p clips: 50MB | 1080p clips: 150MB | 4K clips: 300-500MB",
+                "Common presets: 50 (480p samples), 100 (720p samples), 150 (1080p samples), 300 (4K samples)",
                 "Higher values = more aggressive detection (range: 1-1000)"
             ],
-            "select": [1, 1000]
+"select": [1, 1000]
         },
         {
             "name": "VideoExts",
@@ -72,16 +73,16 @@
             ],
             "select": []
         },
-        {
+{
             "name": "AudioSizeThresholdMB",
             "displayName": "Audio Size Threshold (MB)",
             "value": 2,
-            "description": [
+"description": [
                 "Maximum size (MB) for audio files to be considered samples",
-                "2MB ≈ 30-second 320kbps MP3 | 5MB ≈ 2-minute track",
+                "Common presets: 1 (short clips), 2 (30s @ 320kbps), 4 (1min @ 320kbps), 8 (2min samples)",
                 "Set to 0 to disable audio size detection (range: 0-100)"
             ],
-            "select": [0, 100]
+"select": [0, 100]
         },
         {
             "name": "AudioExts",
