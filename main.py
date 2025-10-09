@@ -29,6 +29,21 @@ import shutil
 import sys
 from pathlib import Path
 
+# Force UTF-8 console on Windows to avoid UnicodeEncodeError in debug logs
+if os.name == "nt":
+    try:
+        # Python 3.7+
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+        sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        # Fallback for older Pythons / odd consoles
+        try:
+            import codecs
+            sys.stdout = codecs.getwriter("utf-8")(getattr(sys.stdout, "buffer", sys.stdout), "replace")
+            sys.stderr = codecs.getwriter("utf-8")(getattr(sys.stderr, "buffer", sys.stderr), "replace")
+        except Exception:
+            pass  # Continue without changes if everything fails
+
 # --- NZBGet exit codes -----------------------------------------------------
 POSTPROCESS_SUCCESS = 93
 POSTPROCESS_ERROR = 94
