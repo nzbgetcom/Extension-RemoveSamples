@@ -47,8 +47,7 @@
             "value": "No",
             "description": [
                 "Enable detailed logging for troubleshooting and configuration testing",
-                "Set to Yes only during setup or when investigating issues",
-                "Testing Guide: https://github.com/Anunnaki-Astronaut/RemoveSamples-NZBGet/wiki/04_Testing_Guide"
+                "Set to Yes only during setup or when investigating issues"
             ],
             "select": ["Yes", "No"]
         },

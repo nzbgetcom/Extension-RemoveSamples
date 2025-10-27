@@ -1,256 +1,71 @@
-# RemoveSamples - NZBGet Extension
-
-[![Tests](https://github.com/Anunnaki-Astronaut/RemoveSamples-NZBGet/actions/workflows/tests.yml/badge.svg)](https://github.com/Anunnaki-Astronaut/RemoveSamples-NZBGet/actions/workflows/tests.yml)
-[![Prospector](https://github.com/Anunnaki-Astronaut/RemoveSamples-NZBGet/actions/workflows/prospector.yml/badge.svg)](https://github.com/Anunnaki-Astronaut/RemoveSamples-NZBGet/actions/workflows/prospector.yml)
-[![Manifest Check](https://github.com/Anunnaki-Astronaut/RemoveSamples-NZBGet/actions/workflows/manifest.yml/badge.svg)](https://github.com/Anunnaki-Astronaut/RemoveSamples-NZBGet/actions/workflows/manifest.yml)
-
-**Modern NZBGet extension** for intelligent sample file detection and removal. Automatically cleans sample files and directories before Sonarr/Radarr/Lidarr/Prowlarr processing.
-
-> 🔄 **Replaces the legacy DeleteSamples.py script** with modern extension format and advanced detection algorithms.
-
-## 🚀 Quick Start
-
-**📖 [Complete Documentation](../../wiki/Home)** | **🚀 [Installation Guide](../../wiki/02_Installation_Guide)** | **⚙️ [Configuration Reference](../../wiki/03_Configuration_Reference)**
-
-## ✨ Key Features
-
-- 🎯 **Smart Detection**: Advanced pattern matching with word boundary detection
-- 📁 **Directory Cleanup**: Removes entire sample directories (`samples/`, `SAMPLE/`)
-- 🎬 **Video Support**: Configurable size thresholds for different quality levels
-- 🎵 **Audio Support**: Separate detection logic for audio samples
-- ⚙️ **Modern Interface**: GUI dropdown configuration (no file editing!)
-- 🐳 **Docker Ready**: Works with all popular NZBGet Docker containers
-- 🔧 **Flexible**: Independent control over file and directory removal
-- 🛡️ **Enterprise-Grade**: Automated security scanning and dependency monitoring
-
-## 🆚 Why Choose RemoveSamples?
-
-**vs DeleteSamples.py (Legacy Script)**
-
-| Feature | DeleteSamples.py | RemoveSamples |
-|---------|-----------------|---------------|
-| **Configuration** | ❌ Manual file editing | ✅ Modern dropdown interface |
-| **Directory Removal** | ❌ Files only | ✅ Files AND directories |
-| **Extension Format** | ❌ Legacy script | ✅ Modern NZBGet extension |
-| **Pattern Detection** | ❌ Basic substring | ✅ Advanced pattern matching |
-| **Audio Support** | ❌ Limited | ✅ Full configurable support |
-| **Maintenance** | ❌ Abandoned (6+ years) | ✅ Active development |
-
-**[See detailed comparison →](../../wiki/09_Comparison_DeleteSamples)**
-
-## 📦 Installation
-
-### Method 1: Extension Manager (Recommended)
-1. Open NZBGet web interface
-2. Go to **Settings** → **Extension Manager**
-3. Find "RemoveSamples" in the list
-4. Click **Install**
-
-### Method 2: Manual Installation
-```bash
-# Download and extract to NZBGet scripts directory
-mkdir -p /path/to/nzbget/scripts/RemoveSamples/
-# Copy main.py and manifest.json
-chmod 755 main.py && chmod 644 manifest.json
-```
-
-### Method 3: Docker/Unraid
-```bash
-# For Unraid NZBGet containers
-cd /mnt/user/appdata/nzbget/scripts/
-mkdir -p RemoveSamples
-# Download files and set permissions for nobody:users
-```
-
-**📖 [Detailed installation instructions for all platforms →](../../wiki/02_Installation_Guide)**
-
-## ⚙️ Configuration
-
-### Basic Settings (Dropdown Interface)
-```
-Remove Directories: Yes    # Delete sample directories
-Remove Files: Yes          # Delete sample files  
-Debug: No                  # Enable for troubleshooting
-```
-
-### Advanced Thresholds
-```
-Video Size Threshold: 150 MB    # 720p: 50MB, 1080p: 100MB, 4K: 300MB+
-Audio Size Threshold: 2 MB      # ~30 seconds of 320kbps MP3
-```
-
-### Recommended Settings by Use Case
-
-**Conservative (New Users)**
-```
-Video: 300 MB | Audio: 5 MB | Debug: Yes
-```
-
-**Balanced (Most Users)**
-```
-Video: 150 MB | Audio: 2 MB | Debug: No
-```
-
-**Aggressive (High Volume)**
-```
-Video: 50 MB | Audio: 1 MB | Debug: No
-```
-
-**📖 [Complete configuration guide →](../../wiki/03_Configuration_Reference)**
-
-## 🔄 Workflow Integration
-
-### Recommended Script Order
-```
-1. PasswordDetector (if used)
-2. FakeDetector (if used)
-3. RemoveSamples ← Place here
-4. Clean (if used)
-5. Other scripts
-```
+# Remove Samples • NZBGet Extension
 
-### Media Manager Integration
-- **Sonarr**: Cleaner TV episode imports, no sample episodes
-- **Radarr**: No trailer/sample files in movie folders  
-- **Lidarr**: No 30-second preview tracks in albums
-- **Prowlarr**: Consistent cleanup across all content types
+Removes “sample” files and sample folders **before** Sonarr/Radarr/Lidarr/Prowlarr process your downloads. Keeps your library clean with safe defaults.
 
-**📖 [Complete workflow integration guide →](../../wiki/05_Workflow_Integration)**
+## Install
 
-## 📊 Sample Detection Examples
+**NZBGet → Settings → Extension Manager**
 
-### ✅ Will Be Removed
-```
-Movie.Name.2023.sample.mkv      # Pattern + size match
-sample.mp4                      # Clear sample file
-preview_sample.avi              # Sample pattern
-samples/                        # Sample directory
-Small.video.under.150MB.mkv     # Size-based detection
-```
-
-### ❌ Will Be Preserved  
-```
-Movie.Name.2023.1080p.mkv       # Normal size, no pattern
-soundtrack.mp3                  # No sample pattern
-behind-the-scenes.mp4           # Above size threshold
-Movie.Title.SAMPLE.2023.mkv     # If "SAMPLE" in original title
-```
+1. Find **Remove Samples** in the list.
+2. Click the download/install icon.
+3. That’s it.
 
-## 🔍 Detection Logic
+## Configure
 
-### Pattern Matching
-- **Word boundary detection**: `\bsample\b` prevents false positives
-- **Multiple separators**: `.sample.`, `_sample.`, `-sample.`
-- **Directory patterns**: Comprehensive sample directory detection
+**NZBGet → Settings → Extension Manager → Remove Samples**
 
-### Size-Based Detection
-- **Separate thresholds** for video/audio files
-- **Configurable extensions** for each media type
-- **Smart combination** of pattern and size detection
-
-**📖 [Complete detection logic documentation →](../../wiki/06_Detection_Logic)**
-
-## 🐳 Docker & Container Support
-
-**Fully compatible with popular Docker containers:**
-- ✅ `linuxserver/nzbget` (Recommended)
-- ✅ `nzbget/nzbget` (Official)
-- ✅ Unraid Community Applications NZBGet
-- ✅ Custom Docker Compose setups
+* **Defaults** have been tested and should work for most users.
+* **Video size threshold:** **150 MB**
+* **Audio size threshold:** **2 MB**
+* **Remove Directories:** Yes
+* **Remove Files:** Yes
+* **Debug:** Leave **Off** under normal use. Turn **On only** during initial setup or when investigating an issue.
 
-**Container-specific installation guides available in documentation.**
+## Extensions order
 
-## 🚨 Troubleshooting
+**NZBGet → Settings → Categories → Category1.Extensions**
+Put **RemoveSamples** **after** unpacking and **before** any final cleanup or media managers.
 
-### Quick Diagnostics
-```bash
-# Enable debug mode
-Settings → Extension Manager → RemoveSamples → Debug: Yes
+**Example (working setup):**
 
-# Check logs
-Settings → Logging → Messages
+1. **Completion** – Verifies download completeness before processing
+2. **PasswordDetector** – Detects password-protected archives early
+3. **FakeDetector** – Flags fake/corrupted releases
+4. **ExtendedUnpacker** – Extracts nested zip/rar archives
+5. **RemoveSamples** – Removes sample files/folders **after unpack**
+6. **Clean** – Final tidy-up
 
-# Verify installation
-ls -la /path/to/scripts/RemoveSamples/
-# Should show: main.py (executable) and manifest.json
-```
+**Why order matters**
 
-### Common Issues
-- **Extension not appearing**: Check file permissions and restart NZBGet
-- **Files not removed**: Verify thresholds and enable debug mode
-- **Docker permissions**: Use container-appropriate user/group
+* Remove Samples runs **after unpack**, so it can see real files.
+* It runs **before Clean**, so samples are removed before final cleanup.
+* Upstream detection scripts run first to catch bad releases early.
 
-**📖 [Complete troubleshooting guide →](../../wiki/07_Troubleshooting_Guide)**
+## Quick test (optional)
 
-## 📞 Support & Documentation
+Turn **Debug = Yes**, process a test download, and review the log lines showing size checks and pattern matches.
+When you’re satisfied, set **Debug = No** for normal operation.
 
-- **📖 Complete Wiki**: [Comprehensive Documentation](../../wiki/01_Home)
-- **🐛 Bug Reports**: [GitHub Issues](https://github.com/Anunnaki-Astronaut/RemoveSamples-NZBGet/issues)
-- **💬 Discussions**: [GitHub Discussions](https://github.com/Anunnaki-Astronaut/RemoveSamples-NZBGet/discussions)
-- **🔒 Security Issues**: anunnaki.astronaut@machinamindmeld.com
-- **❓ FAQ**: [Frequently Asked Questions](../../wiki/08_FAQ)
+## Detection logic (short)
 
-## 🛡️ Security & Quality
+* **Word-boundary matching:** `\bsample\b` avoids false positives
+* **Separator-aware:** catches `.sample.`, `_sample_`, `-sample-`, etc.
+* **Size checks:** small video/audio files under your thresholds are considered samples
 
-RemoveSamples is built with enterprise-grade practices:
-- **Automated security scanning** with CodeQL
-- **Dependency vulnerability monitoring** with Dependabot
-- **Comprehensive test coverage** with automated CI/CD
-- **Professional code review** workflow
+## Windows debug console note
 
-## 🏆 Official Recognition
+If you previously saw a Unicode/console encoding error with **Debug** enabled on Windows, update to the latest version via Extension Manager. The script now uses UTF-8 console output on Windows so Debug works normally.
 
-**🎉 RemoveSamples is now officially available in the NZBGet Extension Manager!**
+## NZBGet versions / requirements
 
-*RemoveSamples has been accepted by the NZBGet team and is available for one-click installation through the official Extension Manager.*
+* **NZBGet:** v23+ recommended
+* **Python:** 3.8+ (required)
 
-## 📋 Requirements
+## Support
 
-- **NZBGet**: Version 14.0 or later (21.0+ recommended)
-- **Python**: 3.8+ installed on your system
-- **Permissions**: Execute permission on main.py
+* **Bug Reports**: [GitHub Issues](https://github.com/Anunnaki-Astronaut/RemoveSamples-NZBGet/issues)
+* **Discussions**: [GitHub Discussions](https://github.com/Anunnaki-Astronaut/RemoveSamples-NZBGet/discussions)
 
-## 🔧 Development
+## License
 
-### Running Tests
-```bash
-python -m unittest tests.py -v
-```
-
-### Code Quality Checks
-```bash
-pip install prospector
-prospector main.py
-```
-
-### Contributing
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature-name`
-3. Make your changes with tests
-4. Ensure all tests pass: `python -m unittest tests.py -v`
-5. Submit a pull request
-
-**📖 [Development documentation →](../../wiki/10_Contributing)**
-
-## 📄 License
-
-GNU General Public License v2.0 - see [LICENSE](LICENSE) file for details.
-
-## 📈 Changelog
-
-### v1.0.1 - Official Release
-- ✅ **Official NZBGet adoption** - Available in Extension Manager
-- ✅ Modern NZBGet extension format with manifest.json
-- ✅ GUI dropdown configuration interface  
-- ✅ Advanced pattern matching with word boundaries
-- ✅ Comprehensive sample detection (files + directories)
-- ✅ Configurable video/audio size thresholds
-- ✅ Full test coverage with automated CI/CD
-- ✅ Docker and Unraid compatibility
-- ✅ Enterprise-grade security practices
-- ✅ Complete documentation wiki
-
----
-
-**Ready to get started?** → **[Installation Guide](../../wiki/Installation-Guide)**  
-**Need help?** → **[FAQ](../../wiki/FAQ)** | **[Troubleshooting](../../wiki/Troubleshooting-Guide)**
+**GNU General Public License v2.0** - see [LICENSE](LICENSE) file for details.
