@@ -4,7 +4,7 @@
     "homepage": "https://github.com/Anunnaki-Astronaut/RemoveSamples-NZBGet",
     "kind": "POST-PROCESSING",
     "displayName": "Remove Samples",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "author": "Anunnaki-Astronaut",
     "license": "GNU",
     "about": "Modern NZBGet extension for intelligent sample file detection and removal. Automatically cleans sample files/directories before Sonarr/Radarr/Lidarr/Prowlarr processing.",
