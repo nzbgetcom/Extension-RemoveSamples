@@ -207,4 +207,6 @@ marimo/_lsp/
 __marimo__/
 
 .vscode/
-.kilocode/
+
+# Kilo Code local rules and memory bank
+/.kilocode/
