@@ -208,5 +208,5 @@ __marimo__/
 
 .vscode/
 
-# Kilo Code local rules and memory bank
-/.kilocode/
+# Kilo Code (keep everything private)
+.kilocode/
