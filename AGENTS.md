@@ -11,6 +11,8 @@ Goals:
 - Clear, minimal logs with a one-line summary
 - Cross-platform behavior on Windows and Linux
 
+Execution order: after ExtendedUnpacker, before Clean and before media managers scan the payload.
+
 ## 2) Contract snapshot
 
 Exit codes:
@@ -18,10 +20,15 @@ Exit codes:
 - `POSTPROCESS_ERROR   = 94`
 - `POSTPROCESS_NONE    = 95`
 
-Required env vars read at runtime:
+Env vars read at runtime:
+
+**Required**
 - `NZBPP_DIRECTORY`
 - `NZBPP_STATUS` with fallback `NZBPP_TOTALSTATUS`
-- `NZBPP_NZBNAME` (optional)
+
+**Optional**
+- `NZBPP_NZBNAME`
+- `NZBPP_CATEGORY`
 
 Required options provided as env vars:
 - `NZBPO_REMOVEDIRECTORIES`
@@ -53,13 +60,16 @@ If you need a new `NZBPO_*` key, open an issue first.
 
 ## 4) Safety rules
 - If `NZBPP_STATUS` or `NZBPP_TOTALSTATUS` is not success, exit 95 without changing files.
+- **Perform deletions or moves only when `NZBPO_REMOVEFILES=yes` or `NZBPO_REMOVEDIRECTORIES=yes`. When `NZBPO_TESTMODE=yes`, never modify files (simulate only).**
 - Never traverse above `NZBPP_DIRECTORY`. Reject symlinks.
 - Respect `PROTECTEDPATHS` and deny lists. When quarantine is enabled, move to `_samples_quarantine` and optionally purge by age.
 - Keep the Windows UTF-8 console safeguard near the top of `main.py` so debug logs do not throw `UnicodeEncodeError`.
+- Never traverse above `NZBPP_DIRECTORY`. Reject symlinks and Windows junctions.
 
 ## 5) Logs
 - `[INFO]` actions, `[ERROR]` failures, `[DEBUG]` only when `NZBPO_DEBUG` is true.
-- Always print one final summary line that reports counts and outcome.
+- Always print one final summary line, for example:
+  `Summary: removed 2 files, 1 dir; quarantined 0; errors 0; exit=93`
 - Return the correct exit code.
 
 ## 6) Local test recipes
@@ -76,12 +86,17 @@ export NZBPO_VIDEOEXTS=".mkv,.mp4,.avi,.mov,.ts,.m4v"
 export NZBPO_AUDIOSIZETHRESHOLDMB=2
 export NZBPO_AUDIOEXTS=".mp3,.flac,.m4a,.ogg,.wav"
 export NZBPO_TESTMODE=yes
+# Optional toggles:
+# export NZBPO_BLOCKIMPORTDURINGTEST=yes
+# export NZBPO_QUARANTINEMODE=yes
+# export NZBPO_QUARANTINEMAXAGEDAYS=30
+
 python3 main.py; echo "exit=$?"
 ```
 
 Windows PowerShell:
 ```powershell
-$env:NZBPP_DIRECTORY = "C:\Path\To	estdir"
+$env:NZBPP_DIRECTORY = "C:\Path\To\testdir"
 $env:NZBPP_STATUS = "SUCCESS"
 $env:NZBPO_REMOVEDIRECTORIES = "yes"
 $env:NZBPO_REMOVEFILES = "yes"
@@ -91,6 +106,11 @@ $env:NZBPO_VIDEOEXTS = ".mkv,.mp4,.avi,.mov,.ts,.m4v"
 $env:NZBPO_AUDIOSIZETHRESHOLDMB = "2"
 $env:NZBPO_AUDIOEXTS = ".mp3,.flac,.m4a,.ogg,.wav"
 $env:NZBPO_TESTMODE = "yes"
+# Optional toggles (uncomment as needed)
+# $env:NZBPO_BLOCKIMPORTDURINGTEST = "yes"
+# $env:NZBPO_QUARANTINEMODE = "yes"
+# $env:NZBPO_QUARANTINEMAXAGEDAYS = "30"
+
 python .\main.py; echo "exit=$LASTEXITCODE"
 ```
 
